@@ -97,7 +97,8 @@ const gamesSlice = createSlice({
       .addCase(fetchGames.pending, (state) => { state.loading = true; })
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.list = Array.isArray(action.payload) ? action.payload : [];
+        state.error = Array.isArray(action.payload) ? null : 'Dữ liệu nhận được không đúng định dạng';
       })
       .addCase(fetchGames.rejected, (state, action) => {
         state.loading = false;

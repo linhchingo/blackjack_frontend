@@ -61,8 +61,11 @@ export default function HomePage() {
     dispatch(setFilters(newFilters));
   };
 
-  const filteredGames = games.filter((game) => {
-    const matchSearch = game.name.toLowerCase().includes(search.toLowerCase());
+  const safeGames = Array.isArray(games) ? games : [];
+
+  const filteredGames = safeGames.filter((game) => {
+    const name = game?.name || '';
+    const matchSearch = name.toLowerCase().includes(search.toLowerCase());
     if (tab === 1) return matchSearch && game.status === 'active';
     if (tab === 2) return matchSearch && game.status === 'completed';
     return matchSearch;
@@ -76,7 +79,6 @@ export default function HomePage() {
       return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     }
     
-    // Nếu cùng ngày, sử dụng ID để đảm bảo thứ tự chính xác
     return sortOrder === 'desc' ? b.id - a.id : a.id - b.id;
   });
 
